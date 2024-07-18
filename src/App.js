@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import Dropzone from "./components/Dropzone";
+import Gallery from "./components/Gallery";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { getImages } from "./features/data/dataSlice";
+import ImageModal from "./components/ImageModal";
 
 function App() {
+  const dispatch = useDispatch();
+  const [imageToView, setImageToView] = useState("");
+  useEffect(() => {
+    dispatch(getImages());
+  }, [dispatch]);
+  const closeImageToView = () => {
+    setImageToView("");
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {imageToView && (
+        <ImageModal
+          imageSrc={imageToView}
+          closeImageToView={closeImageToView}
+        />
+      )}
+      <Gallery setImageToView={setImageToView} />
+      <Dropzone />
     </div>
   );
 }
